@@ -1,18 +1,19 @@
 import random
 
-def generate_four_digit_number():
-    # Generate a 4-digit number using digits 1-6
+
+def generate_four_digit_number(y):
     number = ""
     for _ in range(4):
-        digit = random.randint(1, 6)  # Generate a random digit between 1 and 6
-        number += str(digit)  # Append the digit to the number string
+        digit = random.randint(1, y)
+        number += str(digit)
     return number
 
-# Generate and print a 4-digit number using digits 1-6
 
 class MasterMind:
     def __init__(self):
-        self.generated_num = generate_four_digit_number()
+        self.color_range = 6
+        self.generated_num = generate_four_digit_number(self.color_range)
+        self.digits = 4
 
     def check_if_correct(self, guess):
         display = ""
@@ -20,13 +21,15 @@ class MasterMind:
         colors = "123456"
         correct = ""
         if guess == 'help':
-            print(self.generated_num)
-            return "cheat"
+            self.check_error("cheat")
+            return "error"
         if len(guess) != 4:
-            return "invalid"
+            self.check_error("invalid")
+            return "error"
         for i in range(len(guess)):
             if guess[i] not in colors:
-                return "invalid color"
+                self.check_error("invalid color")
+                return "error"
             elif guess[i] == self.generated_num[i]:
                 display += "*"
                 count += 1
@@ -35,6 +38,16 @@ class MasterMind:
                 display += "o"
         return display
 
+    def check_error(self, ans):
+        if ans == "invalid":
+            print("Invalid guess! Your guess must contain 4 digits.")
+            print()
+        if ans == "invalid color":
+            print("Invalid color code! Color code must be within digit 1-6.")
+            print()
+        if ans == 'cheat':
+            print(self.generated_num)
+            print()
 
     def run_game(self):
         print("Playing Mastermind with 6 colors and 4 positions.")
@@ -43,15 +56,7 @@ class MasterMind:
             guess = str(input("What is your guess?: "))
             print(f"Your guess is {guess}")
             ans = self.check_if_correct(guess)
-            if ans == "invalid":
-                print("Invalid guess! Your guess must contain 4 digits.")
-                print()
-                continue
-            if ans == "invalid color":
-                print("Invalid color code! Color code must be within digit 1-6.")
-                print()
-                continue
-            if ans == 'cheat':
+            if ans == "error":
                 print()
                 continue
             print(ans)
