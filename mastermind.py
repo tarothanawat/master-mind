@@ -1,20 +1,17 @@
 import random
 
-
-def generate_four_digit_number(y):
-    number = ""
-    for _ in range(4):
-        digit = random.randint(1, y)
-        number += str(digit)
-    return number
-
-
 class MasterMind:
     def __init__(self):
         self.color_range = 6
-        self.generated_num = generate_four_digit_number(self.color_range)
+        self.generated_num = self.generate_four_digit_number(self.color_range)
         self.digits = 4
 
+    def generate_four_digit_number(self, y):
+        number = ""
+        for _ in range(self.digits):
+            digit = random.randint(1, y)
+            number += str(digit)
+        return number
     def check_if_correct(self, guess):
         display = ""
         count = 0
